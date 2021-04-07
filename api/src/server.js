@@ -1,4 +1,6 @@
 var express = require('express');
+const mongoose = require('mongoose');
+
 var { graphqlHTTP } = require('express-graphql');
 var { buildSchema } = require('graphql');
  
@@ -8,7 +10,11 @@ var schema = buildSchema(`
     hello: String
   }
 `);
- 
+
+
+//mongoose.Promise = global.Promise
+mongoose.connect('mongodb+srv://b1llyb0b:L.fghM%40JS%21CFa8q@food.rxdeo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connection.once("open", () => console.log("mongo connected"))
 // The root provides a resolver function for each API endpoint
 var root = {
   hello: () => {
@@ -24,3 +30,8 @@ app.use('/graphql', graphqlHTTP({
 }));
 app.listen(4000);
 console.log('Running a GraphQL API server at http://localhost:4000/graphql');
+
+//b1llyb0b
+//L.fghM@JS!CFa8q
+
+//L.fghM%40JS%21CFa8q
