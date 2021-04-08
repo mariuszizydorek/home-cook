@@ -13,7 +13,7 @@ var schema = buildSchema(`
 
 
 //mongoose.Promise = global.Promise
-mongoose.connect('mongodb+srv://b1llyb0b:L.fghM%40JS%21CFa8q@food.rxdeo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://b1llyb0b:test@dev.rxdeo.mongodb.net/food?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.once("open", () => console.log("mongo connected"))
 // The root provides a resolver function for each API endpoint
 var root = {
