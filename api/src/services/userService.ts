@@ -1,9 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Service } from "typedi";
-import UserInfo, { User } from "../types/userInfo.type";
+import UserInfo, {
+  PersonalInfo,
+  PersonalInfoInput,
+  User,
+} from "../types/userInfo.type";
 import { config } from "../configs/config";
-import { UserModel } from "../model";
+import { PersonalInfoModel, UserModel } from "../model";
 
 @Service()
 export class UserService {
@@ -27,6 +31,12 @@ export class UserService {
     });
 
     return Promise.resolve({ id: lowerCaseEmail, name: lowerCaseEmail });
+  }
+
+  async saveUserDetails(
+    personalInfo: PersonalInfoInput
+  ): Promise<PersonalInfo> {
+    return PersonalInfoModel.create(personalInfo);
   }
 }
 

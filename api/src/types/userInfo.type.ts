@@ -31,6 +31,38 @@ export class User {
 }
 
 @ObjectType()
+export class PersonalInfo {
+  @Field()
+  @prop()
+  userName: string;
+  @Field()
+  @prop()
+  firstName: string;
+  @Field()
+  @prop()
+  lastName: string;
+  @Field()
+  @prop()
+  displayName: string;
+}
+
+@InputType()
+export class PersonalInfoInput {
+  @Field()
+  @prop()
+  userName: string;
+  @Field()
+  @prop()
+  firstName: string;
+  @Field()
+  @prop()
+  lastName: string;
+  @Field()
+  @prop()
+  displayName: string;
+}
+
+@ObjectType()
 export class UserToken {
   @Field()
   @prop()

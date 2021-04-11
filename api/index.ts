@@ -8,6 +8,7 @@ import { Container } from "typedi";
 const app: express.Application = express();
 const path = "/admin/graphql";
 const PORT = process.env.PORT || 4000;
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 async function main() {
   const schema = await buildSchema({
@@ -51,6 +52,11 @@ async function main() {
 
   app.listen(PORT, () => {
     console.log(`🚀 started http://localhost:${PORT}${path}`);
+  });
+
+  const client = new ApolloClient({
+    uri: "https://48p1r2roz4.sse.codesandbox.io",
+    cache: new InMemoryCache(),
   });
 }
 

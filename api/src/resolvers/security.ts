@@ -1,5 +1,10 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import UserInfo, { AuthenticationInput, User } from "../types/userInfo.type";
+import UserInfo, {
+  AuthenticationInput,
+  PersonalInfo,
+  PersonalInfoInput,
+  User,
+} from "../types/userInfo.type";
 import AuthenticationInfo from "../types/userInfo.type";
 import { UserService } from "../services/userService";
 import { Service } from "typedi";
@@ -35,5 +40,13 @@ export default class UserResolver {
       authentication.password
     );
     return { id: "test", name: "bla" };
+  }
+
+  @Mutation((returns) => PersonalInfo)
+  async updateDetails(@Arg("personalInfo") personalInfo: PersonalInfoInput) {
+    const personalInfoReturn = await this.userService.saveUserDetails(
+      personalInfo
+    );
+    return personalInfoReturn;
   }
 }
