@@ -46,6 +46,7 @@ export function HomePage() {
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
+          <Button color="inherit">Chef Sign Up</Button>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>

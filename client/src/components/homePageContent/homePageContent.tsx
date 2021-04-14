@@ -13,9 +13,17 @@ import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: "100%",
+    // padding: "0px 10px 10px 10px",
+  },
+  searchForm: {
     maxWidth: 345,
   },
   media: {
@@ -39,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
     minHeight: "500px",
+    margin: "10px"
   },
   searchboxcontainer: {
     padding: theme.spacing(2),
@@ -50,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     variant: "outlined",
     margin: "auto",
     marginTop: "200px",
+    marginBottom: "30px",
   },
   smallHeadline: {
     marginBottom: "20px",
@@ -72,21 +82,21 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0,
+    fontWeight: theme.typography.fontWeightRegular,
   },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
+  accordianContainer: {
+    margin: "10px",
+    width: "100%",
+    //textAlign: "center",
+  }
 }));
 
 export function HomePageContent() {
   const classes = useStyles();
-  
+
   return (
     <div>
-      <Grid container spacing={3}>
+      <Grid container spacing={0}>
         <Grid item xs={12} className={classes.topGrid}>
           <Paper className={classes.searchboxcontainer}>
             <div className={classes.largeHeadline}>Home Cook</div>
@@ -95,7 +105,7 @@ export function HomePageContent() {
               <CssBaseline />
               <Container maxWidth="xs">
                 <Typography component="div">
-                  <form className={classes.root} noValidate autoComplete="off">
+                  <form className={classes.searchForm} noValidate autoComplete="off">
                     <TextField
                       id="postcode-input"
                       label="Enter your postcode"
@@ -119,10 +129,10 @@ export function HomePageContent() {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  alt="Our Story"
+                  alt="How it works"
                   height="250"
                   image="./images/munch-fit.jpg"
-                  title="Contemplative Reptile"
+                  title="How it works"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -146,7 +156,6 @@ export function HomePageContent() {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={3}>
-        
         <Paper className={classes.paper}>
             <Card className={classes.card2} elevation={0}>
               <CardActionArea>
@@ -155,7 +164,7 @@ export function HomePageContent() {
                   alt="Our Story"
                   height="250"
                   image="./images/happy.jpg"
-                  title="Contemplative Reptile"
+                  title="Our Story"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -187,10 +196,10 @@ export function HomePageContent() {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  alt="Our Story"
+                  alt="The Chefs"
                   height="250"
                   image="./images/chefs.jpg"
-                  title="Contemplative Reptile"
+                  title="The Chefs"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -219,10 +228,10 @@ export function HomePageContent() {
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  alt="Our Story"
+                  alt="Are you a chef? Sign up"
                   height="250"
                   image="./images/6720.jpg"
-                  title="Contemplative Reptile"
+                  title="Are you a chef? Sign up"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -245,10 +254,50 @@ export function HomePageContent() {
             </Card>
           </Paper>
         </Grid>
-      </Grid>
-      <Grid item xs={12} sm={6} md={3} lg={3}>
-      <Paper elevation={3} />
-     FAQs
+        </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={12}>
+      <Paper elevation={3} className={classes.accordianContainer}>
+      <Typography style={{ textAlign: "left"}} gutterBottom variant="h5" component="h2">FAQs</Typography>
+     <Accordion >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>Accordion 1</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+            sit amet blandit leo lobortis eget.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2a-content"
+          id="panel2a-header"
+        >
+          <Typography className={classes.heading}>Accordion 2</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+            sit amet blandit leo lobortis eget.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion disabled>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel3a-content"
+          id="panel3a-header"
+        >
+          <Typography className={classes.heading}>Disabled Accordion</Typography>
+        </AccordionSummary>
+      </Accordion>
+      </Paper>
       </Grid>
     </div>
   );
