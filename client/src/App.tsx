@@ -1,10 +1,13 @@
 import React from "react";
+<<<<<<< HEAD
 // import logo from "./logo.svg";
+=======
+>>>>>>> main
 import "./App.css";
-import { HomePage } from "./pages/home/home";
+import Routes from "./pages/Routes";
 
 function App() {
-  return <HomePage />;
+  return <Routes />;
 }
 
 export default App;
