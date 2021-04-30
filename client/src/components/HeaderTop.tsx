@@ -7,10 +7,14 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
+    '&> a' : {
+      margin: theme.spacing(1)
+    },
   },
   toolbarTitle: {
     flex: 1,
@@ -23,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     flexShrink: 0,
   },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
 
 export default function HeaderTop(props: { sections: []; title: String }) {
@@ -31,7 +38,6 @@ export default function HeaderTop(props: { sections: []; title: String }) {
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
-        <Button size="small">Subscribe</Button>
         <Typography
           component="h2"
           variant="h5"
@@ -42,10 +48,10 @@ export default function HeaderTop(props: { sections: []; title: String }) {
         >
           {title}
         </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-        <Button variant="outlined" size="small">
+        <Button variant="outlined" size="small" href="/login" >
+          Login
+        </Button>
+        <Button variant="outlined" size="small"  href="/signup" >
           Sign up
         </Button>
       </Toolbar>
