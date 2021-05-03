@@ -52,3 +52,6 @@ git pull
 cd client
 yarn
 yarn start
+
+# example to add material components
+yarn add @material/card
