@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Router, Route, Switch } from "react-router-dom";
 import { HomePage } from "./home/home";
 import SignUp from "../components/user/SignUp";
-import Login from "../components/user/Login";
+import SignIn from "../components/user/SingIn";
 import HeaderTop from "../components/HeaderTop.tsx";
 
 const Container = styled.div`
@@ -23,7 +23,7 @@ export default function Routes() {
           <HeaderTop />
           <Switch>
             <Route path="/" exact component={HomePage} />
-            <Route path="/login" exact component={Login} />
+            <Route path="/signin" exact component={SignIn} />
             <Route path="/signup" exact component={SignUp} />
           </Switch>
         </Container>

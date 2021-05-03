@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
+import FastfoodTwoToneIcon from "@material-ui/icons/FastfoodTwoTone";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
@@ -12,8 +13,8 @@ import { red } from "@material-ui/core/colors";
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    '&> a' : {
-      margin: theme.spacing(1)
+    "&> a": {
+      margin: theme.spacing(1),
     },
   },
   toolbarTitle: {
@@ -38,6 +39,11 @@ export default function HeaderTop(props: { sections: []; title: String }) {
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
+        <Typography component="h2">
+          <IconButton href="/">
+            <FastfoodTwoToneIcon />
+          </IconButton>
+        </Typography>
         <Typography
           component="h2"
           variant="h5"
@@ -48,30 +54,12 @@ export default function HeaderTop(props: { sections: []; title: String }) {
         >
           {title}
         </Typography>
-        <Button variant="outlined" size="small" href="/login" >
+        <Button variant="outlined" size="small" href="/signIn">
           Login
         </Button>
-        <Button variant="outlined" size="small"  href="/signup" >
+        <Button variant="outlined" size="small" href="/signup">
           Sign up
         </Button>
-      </Toolbar>
-      <Toolbar
-        component="nav"
-        variant="dense"
-        className={classes.toolbarSecondary}
-      >
-        {sections.map((section: any) => (
-          <Link
-            color="inherit"
-            noWrap
-            key={section.title}
-            variant="body2"
-            href={section.url}
-            className={classes.toolbarLink}
-          >
-            {section.title}
-          </Link>
-        ))}
       </Toolbar>
     </React.Fragment>
   );
