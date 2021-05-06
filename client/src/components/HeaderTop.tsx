@@ -9,6 +9,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import { red } from "@material-ui/core/colors";
+import { gql, useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -33,8 +34,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_USER = gql`
+  query GetUserInfo($token: String!) {
+    userInfo(token: $token) {
+      userName
+      firstName
+      lastName
+    }
+  }
+`;
+
 export default function HeaderTop(props: { sections: []; title: String }) {
   const classes = useStyles();
+  const { loading, error, data } = useQuery(GET_USER, {
+    variables: { token: "test" },
+  });
+  console.error(error);
+
+  if (loading) return <p>Loading...</p>;
+
+  console.log(data);
   const { sections = [], title } = props;
   return (
     <React.Fragment>

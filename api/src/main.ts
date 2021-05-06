@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import UserResolver from "./src/resolvers/security";
+import UserResolver from "./resolvers/security";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -48,17 +48,23 @@ async function main() {
     res.end();
   });
 
-  app.listen(PORT, () => {
+  const expressServer = app.listen(PORT, () => {
     console.log(`🚀 started http://localhost:${PORT}${path}`);
   });
+
+  // Hot Module Replacement
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => {
+      console.log("Module disposed. ");
+      expressServer.close();
+      server.stop();
+      mongoose.disconnect();
+      console.log(server, "stopped");
+    });
+  }
 }
 
 main()
   .then((_) => {})
   .catch((error) => console.log(error));
-
-// Hot Module Replacement
-if (module.hot) {
-  module.hot.accept();
-  module.hot.dispose(() => console.log("Module disposed. "));
-}

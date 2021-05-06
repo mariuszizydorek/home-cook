@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Service } from "typedi";
 import UserInfo, {
+  AuthenticationInput,
   PersonalInfo,
   PersonalInfoInput,
   User,
@@ -15,7 +16,12 @@ export class UserService {
     return Promise.reject();
   }
 
-  async register(email: string, password: string): Promise<UserInfo> {
+  async register({
+    firstName,
+    lastName,
+    email,
+    password,
+  }: AuthenticationInput): Promise<UserInfo | undefined> {
     const lowerCaseEmail = email.toLowerCase().trim();
 
     const exist = await UserModel.findOne({ userName: lowerCaseEmail }).exec();
@@ -26,11 +32,13 @@ export class UserService {
       const user: User = {
         userName: lowerCaseEmail,
         encryptedPassword: p,
+        firstName,
+        lastName,
       };
       return UserModel.create(user);
     });
 
-    return Promise.resolve({ id: lowerCaseEmail, name: lowerCaseEmail });
+    return Promise.resolve(undefined);
   }
 
   async saveUserDetails(

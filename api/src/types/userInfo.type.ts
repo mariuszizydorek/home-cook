@@ -3,11 +3,12 @@ import { prop } from "@typegoose/typegoose";
 
 @ObjectType()
 export default class UserInfo {
-  @Field(() => ID)
-  id: string;
-
   @Field()
-  name: string;
+  userName: string;
+  @Field()
+  firstName: string;
+  @Field()
+  lastName: string;
 }
 
 @ObjectType()
@@ -19,15 +20,18 @@ export class AuthenticationInfo {
   authToken: string;
 }
 
-@ObjectType()
 export class User {
-  @Field()
   @prop()
   userName: string;
 
-  @Field()
   @prop()
   encryptedPassword: string;
+
+  @prop()
+  firstName: string;
+
+  @prop()
+  lastName: string;
 }
 
 @ObjectType()
@@ -76,7 +80,13 @@ export class UserToken {
 @InputType()
 export class AuthenticationInput {
   @Field()
-  userName: string;
+  firstName: string;
+
+  @Field()
+  lastName: string;
+
+  @Field()
+  email: string;
 
   @Field()
   password: string;
