@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../Copyright";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+function SignIn() {
   const classes = useStyles();
 
   return (
@@ -103,3 +104,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default withRouter(SignIn);

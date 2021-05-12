@@ -2,7 +2,7 @@ import React from "react";
 import { createBrowserHistory } from "history";
 import styled from "@emotion/styled";
 import { connect } from "react-redux";
-import { Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { HomePage } from "./home/home";
 import SignUp from "../components/user/SignUp";
 import SignIn from "../components/user/SingIn";

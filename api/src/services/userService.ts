@@ -28,17 +28,20 @@ export class UserService {
     if (exist) {
       return Promise.reject("User already exist");
     }
-    await encryptPassword(password).then((p) => {
-      const user: User = {
-        userName: lowerCaseEmail,
-        encryptedPassword: p,
-        firstName,
-        lastName,
-      };
-      return UserModel.create(user);
-    });
-
-    return Promise.resolve(undefined);
+    return encryptPassword(password)
+      .then((p) => {
+        const user: User = {
+          userName: lowerCaseEmail,
+          encryptedPassword: p,
+          firstName,
+          lastName,
+        };
+        return user;
+      })
+      .then((user) => {
+        return UserModel.create(user);
+      })
+      .then((user) => ({ userName: email, firstName, lastName }));
   }
 
   async saveUserDetails(
