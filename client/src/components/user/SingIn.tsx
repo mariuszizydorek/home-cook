@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,7 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../Copyright";
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
+import { gql, useMutation } from "@apollo/client";
+import { log } from "util";
+import { string } from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,8 +38,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const SIGN_IN = gql`
+  mutation login($loginInput: LoginInput!) {
+    login(loginInput: $loginInput) {
+      userName
+      authToken
+    }
+  }
+`;
+
 function SignIn() {
   const classes = useStyles();
+  const [loginForm, setLoginForm] = useState({
+    email: string,
+    password: string,
+  });
+
+  const history = useHistory();
+  const [login, { data }] = useMutation(SIGN_IN, {
+    onCompleted(data) {
+      if (data) {
+        localStorage.setItem("token", data.login.authToken);
+        localStorage.setItem("email", data.login.email);
+        localStorage.setItem("forceUserFetch", "1");
+        history.push("/"); //signin
+      }
+    },
+    onError(error) {
+      debugger;
+    },
+  });
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    login({
+      variables: {
+        loginInput: {
+          email: loginForm.email,
+          password: loginForm.password,
+        },
+      },
+    }).catch((error) => {
+      console.error(error);
+    });
+  };
+
+  const setStateValue = ({ target }: any) => {
+    setLoginForm({
+      ...loginForm,
+      [target.id]: target.value,
+    });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -48,13 +101,15 @@ function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
             id="email"
+            value={loginForm.email}
+            onChange={setStateValue}
             label="Email Address"
             name="email"
             autoComplete="email"
@@ -65,6 +120,8 @@ function SignIn() {
             margin="normal"
             required
             fullWidth
+            value={loginForm.password}
+            onChange={setStateValue}
             name="password"
             label="Password"
             type="password"

@@ -1,7 +1,3 @@
 query test{
     Test}
 
-query userInfo{
-    userInfo(token:"test"){
-        userName, firstName, lastName
-    }}

@@ -7,7 +7,7 @@
     "test": "test",
     "start2": "node dist/index.js",
     "start:dev2": "ts-node-dev --respawn index.ts",
-    "build2": "rimraf dist && mkdir dist && tsc -b && copyfiles -u 1 src/ dist/",
+    "build": "rimraf dist && mkdir dist && tsc -b && copyfiles -u 1 src/ dist/",
     "build:dev": "webpack --config webpack.development.js",
     "build:prod": "webpack --config webpack.production.js",
     "start:server": "node ./dist/server",

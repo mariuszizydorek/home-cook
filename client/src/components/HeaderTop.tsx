@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import { red } from "@material-ui/core/colors";
 import { gql, useQuery } from "@apollo/client";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -35,26 +36,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const GET_USER = gql`
-  query GetUserInfo($token: String!) {
-    userInfo(token: $token) {
+  query userInfoQuery {
+    userInfo {
       userName
       firstName
       lastName
+      loggedIn
     }
   }
 `;
 
 export default function HeaderTop(props: { sections: []; title: String }) {
   const classes = useStyles();
-  const { loading, error, data } = useQuery(GET_USER, {
-    variables: { token: "test" },
+  const { loading, error, data, refetch } = useQuery(GET_USER, {
+    variables: {},
   });
-  console.error(error);
+  const history = useHistory();
 
   if (loading) return <p>Loading...</p>;
 
   console.log(data);
+  console.log(error);
+  const loggedIn = error ? false : data?.userInfo?.loggedIn;
+  if (localStorage.getItem("forceUserFetch") === "1") {
+    refetch();
+    localStorage.setItem("forceUserFetch", "0");
+    history.go(0);
+  }
+
   const { sections = [], title } = props;
+
+  const handleSignOut = () => {
+    localStorage.setItem("token", "");
+    refetch();
+    history.go(0);
+  };
+
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
@@ -73,12 +90,21 @@ export default function HeaderTop(props: { sections: []; title: String }) {
         >
           {title}
         </Typography>
-        <Button variant="outlined" size="small" href="/signIn">
-          Login
-        </Button>
-        <Button variant="outlined" size="small" href="/signup">
-          Sign up
-        </Button>
+        {!loggedIn && (
+          <Button variant="outlined" size="small" href="/signIn">
+            Login
+          </Button>
+        )}
+        {!loggedIn && (
+          <Button variant="outlined" size="small" href="/signup">
+            Sign up
+          </Button>
+        )}
+        {loggedIn && (
+          <Button variant="outlined" size="small" onClick={handleSignOut}>
+            Sign out
+          </Button>
+        )}
       </Toolbar>
     </React.Fragment>
   );

@@ -61,22 +61,14 @@ function SignUp(props: any) {
     onCompleted(data) {
       history.push("/signin"); //signin
     },
-    onError(error) {
-      debugger;
-    },
+    onError(error) {},
   });
 
-  const setStateValue = (e: any) => {
+  const setStateValue = ({ target }: any) => {
     setFormState({
       ...formState,
-      [e.target.id]: e.target.value,
+      [target.id]: target.value,
     });
-  };
-  const authentication: AuthenticationInput = {
-    firstName: formState.firstName,
-    lastName: formState.lastName,
-    email: formState.email,
-    password: formState.password,
   };
 
   const handleSubmit = (e: any) => {

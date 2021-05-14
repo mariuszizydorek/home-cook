@@ -1,14 +1,22 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  Authorized,
+  AuthChecker,
+} from "type-graphql";
 import UserInfo, {
   AuthenticationInput,
+  LoginInput,
   PersonalInfo,
   PersonalInfoInput,
   User,
+  UserToken,
 } from "../types/userInfo.type";
-import AuthenticationInfo from "../types/userInfo.type";
 import { UserService } from "../services/userService";
 import { Service } from "typedi";
-import { PromiseOrValue } from "graphql/jsutils/PromiseOrValue";
 
 @Service()
 @Resolver((of) => UserInfo)
@@ -20,28 +28,27 @@ export default class UserResolver {
     return Promise.resolve("test");
   }
 
+  @Authorized()
   @Query((returns) => UserInfo)
   async userInfo(
-    @Arg("token", { nullable: false }) token: string
+    @Ctx("payload") payload: any,
+    @Ctx("token") token: string,
+    @Ctx("loggedIn") loggedIn: boolean
   ): Promise<UserInfo> {
-    const userInfo: UserInfo = {
-      userName: token + " zzz",
-      firstName: token + " ppp",
-      lastName: token + " bla",
-    };
-    return Promise.resolve(userInfo);
+    return this.userService
+      .findUserToken(token)
+      .then((userToken) => {
+        return this.userService.findUserInfo(userToken.userName);
+      })
+      .then((userInfo) => {
+        const userI = { ...userInfo, loggedIn };
+        return userI;
+      });
   }
 
-  @Query(() => AuthenticationInfo)
-  async login(
-    @Arg("authentication") authenticationInput: AuthenticationInput
-  ): Promise<AuthenticationInfo> {
-    const authInfo: AuthenticationInfo = {
-      userName: "test",
-      firstName: "ss",
-      lastName: "sda",
-    };
-    return Promise.resolve(authInfo);
+  @Mutation(() => UserToken)
+  async login(@Arg("loginInput") loginInput: LoginInput): Promise<UserToken> {
+    return this.userService.login(loginInput.email, loginInput.password);
   }
 
   @Mutation((returns) => UserInfo)
@@ -55,7 +62,6 @@ export default class UserResolver {
     const personalInfoReturn = await this.userService.saveUserDetails(
       personalInfo
     );
-    //test bla sda sdfsa
     return personalInfoReturn;
   }
 }

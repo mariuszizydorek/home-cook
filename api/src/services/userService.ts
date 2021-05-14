@@ -6,14 +6,43 @@ import UserInfo, {
   PersonalInfo,
   PersonalInfoInput,
   User,
+  UserToken,
 } from "../types/userInfo.type";
 import { config } from "../configs/config";
-import { PersonalInfoModel, UserModel } from "../model";
+import { PersonalInfoModel, UserModel, UserTokenModel } from "../model";
+import { rejects } from "assert";
 
 @Service()
 export class UserService {
-  async login(email: string, password: string): Promise<UserInfo> {
+  async login(userName: string, password: string): Promise<UserToken> {
+    const lowerCaseEmail = userName.toLowerCase().trim();
+    return UserModel.findOne({ userName: lowerCaseEmail })
+      .exec()
+      .then((user) => {
+        if (user?.userName === userName) {
+          const { encryptedPassword } = user;
+          return comparePassword(password, encryptedPassword);
+        }
+        return Promise.reject("Wrong user name or password");
+      })
+      .then((result) => {
+        if (result) {
+          return UserTokenModel.deleteMany({ userName: lowerCaseEmail });
+        }
+        return Promise.reject();
+      })
+      .then(() =>
+        UserTokenModel.create({
+          userName: lowerCaseEmail,
+          authToken: getToken({ userName }),
+        })
+      );
+
     return Promise.reject();
+  }
+
+  validateToken(token: any) {
+    return getPayload(token);
   }
 
   async register({
@@ -48,6 +77,25 @@ export class UserService {
     personalInfo: PersonalInfoInput
   ): Promise<PersonalInfo> {
     return PersonalInfoModel.create(personalInfo);
+  }
+
+  async findUserToken(token: string): Promise<UserToken> {
+    // @ts-ignore
+    return UserTokenModel.findOne({ authToken: token });
+  }
+
+  async findUserInfo(userName: string): Promise<UserInfo> {
+    return new Promise<UserInfo>((resolve, rejects) => {
+      UserModel.findOne({ userName: userName }, (err, res) => {
+        if (err) rejects(err);
+
+        resolve({
+          userName: res?.userName ?? "",
+          firstName: res?.firstName ?? "",
+          lastName: res?.lastName ?? "",
+        });
+      });
+    });
   }
 }
 
@@ -89,7 +137,7 @@ const getToken = (payload: any) => {
   return token;
 };
 
-const getPayload = (token: any) => {
+export const getPayload = (token: any) => {
   try {
     const payload = jwt.verify(token, config.secret);
     return { loggedIn: true, payload };

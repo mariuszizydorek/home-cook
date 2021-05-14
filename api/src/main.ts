@@ -1,17 +1,30 @@
 import "reflect-metadata";
-import UserResolver from "./resolvers/security";
+import UserResolver from "./resolvers/securityResolver";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
+import { AuthChecker, buildSchema } from "type-graphql";
 const mongoose = require("mongoose");
 import { Container } from "typedi";
+import { UserTokenModel } from "./model";
+import { getPayload } from "./services/userService";
 const app: express.Application = express();
 const path = "/admin/graphql";
 const PORT = process.env.PORT || 4000;
 
+export const customAuthChecker: AuthChecker<{}> = (
+  { root, args, context, info },
+  roles
+) => {
+  //@ts-ignore
+  const { loggedIn } = context;
+
+  return loggedIn;
+};
+
 async function main() {
   const schema = await buildSchema({
     resolvers: [UserResolver],
+    authChecker: customAuthChecker,
     container: Container,
     validate: true,
   });
@@ -20,6 +33,24 @@ async function main() {
     introspection: true,
     playground: true,
     tracing: true,
+    context: async ({ req }) => {
+      // Note: This example uses the `req` argument to access headers,
+      // but the arguments received by `context` vary by integration.
+      // This means they vary for Express, Koa, Lambda, etc.
+      //
+      // To find out the correct arguments for a specific integration,
+      // see https://www.apollographql.com/docs/apollo-server/api/apollo-server/#middleware-specific-context-fields
+
+      // Get the user token from the headers.
+      const token = req.headers.authorization || "";
+
+      // Try to retrieve a user with the token
+      //const user = await UserTokenModel.findOne({ authToken: token }).exec();
+      const payload = getPayload(token);
+      console.log(payload);
+      // Add the user to the context
+      return { ...payload, token };
+    },
   });
 
   server.applyMiddleware({

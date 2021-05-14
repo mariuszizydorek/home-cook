@@ -9,6 +9,8 @@ export default class UserInfo {
   firstName: string;
   @Field()
   lastName: string;
+  @Field()
+  loggedIn?: boolean;
 }
 
 @ObjectType()
@@ -32,6 +34,17 @@ export class User {
 
   @prop()
   lastName: string;
+}
+
+@ObjectType()
+export class UserToken {
+  @Field()
+  @prop()
+  userName: string;
+
+  @Field()
+  @prop()
+  authToken: string;
 }
 
 @ObjectType()
@@ -66,17 +79,6 @@ export class PersonalInfoInput {
   displayName: string;
 }
 
-@ObjectType()
-export class UserToken {
-  @Field()
-  @prop()
-  userName: string;
-
-  @Field()
-  @prop()
-  authToken: string;
-}
-
 @InputType()
 export class AuthenticationInput {
   @Field()
@@ -85,6 +87,15 @@ export class AuthenticationInput {
   @Field()
   lastName: string;
 
+  @Field()
+  email: string;
+
+  @Field()
+  password: string;
+}
+
+@InputType()
+export class LoginInput {
   @Field()
   email: string;
 

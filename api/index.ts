@@ -1,25 +1,64 @@
 import "reflect-metadata";
-import UserResolver from "./src/resolvers/security";
+import UserResolver from "./src/resolvers/securityResolver";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
+import { AuthChecker, buildSchema } from "type-graphql";
 const mongoose = require("mongoose");
 import { Container } from "typedi";
+import { UserTokenModel } from "./src/model";
 const app: express.Application = express();
 const path = "/admin/graphql";
 const PORT = process.env.PORT || 4000;
 
+export const customAuthChecker: AuthChecker<{}> = (
+  { root, args, context, info },
+  roles
+) => {
+  console.log(root, args, context, info);
+  const token = ""; // req.headers.authorization || "";
+
+  // Try to retrieve a user with the token
+  const user = UserTokenModel.findOne({ authToken: token });
+
+  // here we can read the user from context
+  // and check his permission in the db against the `roles` argument
+  // that comes from the `@Authorized` decorator, eg. ["ADMIN", "MODERATOR"]
+
+  return true; // or false if access is denied
+};
+
 async function main() {
   const schema = await buildSchema({
     resolvers: [UserResolver],
+    authChecker: customAuthChecker,
+    authMode: "null",
     container: Container,
     validate: true,
   });
+
   const server = new ApolloServer({
     schema,
     introspection: true,
     playground: true,
     tracing: true,
+    context: ({ req }) => {
+      // Note: This example uses the `req` argument to access headers,
+      // but the arguments received by `context` vary by integration.
+      // This means they vary for Express, Koa, Lambda, etc.
+      //
+      // To find out the correct arguments for a specific integration,
+      // see https://www.apollographql.com/docs/apollo-server/api/apollo-server/#middleware-specific-context-fields
+
+      // Get the user token from the headers.
+      console.log(req.headers);
+      const token = req.headers.authorization || "";
+
+      // Try to retrieve a user with the token
+      const user = UserTokenModel.findOne({ authToken: token });
+      console.log(user);
+      // Add the user to the context
+      return { user };
+    },
   });
 
   server.applyMiddleware({

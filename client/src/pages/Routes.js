@@ -18,16 +18,14 @@ export const history = createBrowserHistory();
 export default function Routes() {
   return (
     <Router history={history}>
-      {
-        <Container>
-          <HeaderTop />
-          <Switch>
-            <Route path="/" exact component={HomePage} />
-            <Route path="/signin" exact component={SignIn} />
-            <Route path="/signup" exact component={SignUp} />
-          </Switch>
-        </Container>
-      }
+      <Container>
+        <HeaderTop />
+        <Switch>
+          <Route path="/" exact component={HomePage} />
+          <Route path="/signin" exact component={SignIn} />
+          <Route path="/signup" exact component={SignUp} />
+        </Switch>
+      </Container>
     </Router>
   );
 }
