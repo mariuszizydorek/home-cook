@@ -7,6 +7,7 @@ import { HomePage } from "./home/home";
 import SignUp from "../components/user/SignUp";
 import SignIn from "../components/user/SingIn";
 import HeaderTop from "../components/HeaderTop.tsx";
+import { AdminComponent } from "../components/shop/AdminComponent";
 
 const Container = styled.div`
   height: 100%;
@@ -24,6 +25,7 @@ export default function Routes() {
           <Route path="/" exact component={HomePage} />
           <Route path="/signin" exact component={SignIn} />
           <Route path="/signup" exact component={SignUp} />
+          <Route path="/admin" exact component={AdminComponent} />
         </Switch>
       </Container>
     </Router>

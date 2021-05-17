@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 import { Container } from "typedi";
 import { UserTokenModel } from "./model";
 import { getPayload } from "./services/userService";
+import CategoryResolver from "./resolvers/shop/categoryResolver";
+import ProductResolver from "./resolvers/shop/productResolver";
 const app: express.Application = express();
 const path = "/admin/graphql";
 const PORT = process.env.PORT || 4000;
@@ -23,7 +25,7 @@ export const customAuthChecker: AuthChecker<{}> = (
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, CategoryResolver, ProductResolver],
     authChecker: customAuthChecker,
     container: Container,
     validate: true,

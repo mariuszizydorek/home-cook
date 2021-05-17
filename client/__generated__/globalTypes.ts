@@ -14,6 +14,11 @@ export interface AuthenticationInput {
   password: string;
 }
 
+export interface CategoryInput {
+  category: string;
+  icon: string;
+}
+
 export interface LoginInput {
   email: string;
   password: string;

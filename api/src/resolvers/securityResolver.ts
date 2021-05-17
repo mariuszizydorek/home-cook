@@ -1,12 +1,4 @@
-import {
-  Arg,
-  Ctx,
-  Mutation,
-  Query,
-  Resolver,
-  Authorized,
-  AuthChecker,
-} from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver, Authorized } from "type-graphql";
 import UserInfo, {
   AuthenticationInput,
   LoginInput,

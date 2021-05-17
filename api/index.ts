@@ -6,6 +6,8 @@ import { AuthChecker, buildSchema } from "type-graphql";
 const mongoose = require("mongoose");
 import { Container } from "typedi";
 import { UserTokenModel } from "./src/model";
+import CategoryResolver from "./src/resolvers/shop/categoryResolver";
+import ProductResolver from "./src/resolvers/shop/productResolver";
 const app: express.Application = express();
 const path = "/admin/graphql";
 const PORT = process.env.PORT || 4000;
@@ -29,7 +31,7 @@ export const customAuthChecker: AuthChecker<{}> = (
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, CategoryResolver, ProductResolver],
     authChecker: customAuthChecker,
     authMode: "null",
     container: Container,
